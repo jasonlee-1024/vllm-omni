@@ -72,6 +72,19 @@ class OmniInputProcessor(InputProcessor):
         mm_registry: Multi-modal registry for processing multimodal inputs
     """
 
+    def _platform_validate_request(
+        self,
+        processed_inputs: ProcessorInputs,
+        params: SamplingParams | PoolingParams,
+    ) -> None:
+        """Validate request against platform constraints.
+
+        No-op fallback for vLLM versions that do not define this method
+        on the base InputProcessor (added after 0.18.x).
+        """
+        if hasattr(super(), "_platform_validate_request"):
+            super()._platform_validate_request(processed_inputs, params)
+
     @staticmethod
     def _dtype_to_name(dtype: torch.dtype) -> str:
         """Convert torch dtype to string representation.

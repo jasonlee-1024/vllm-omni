@@ -107,5 +107,19 @@ OmniConnectorFactory.register_connector("MooncakeStoreConnector", _create_moonca
 OmniConnectorFactory.register_connector("MooncakeTransferEngineConnector", _create_mooncake_transfer_engine_connector)
 OmniConnectorFactory.register_connector("SharedMemoryConnector", _create_shm_connector)
 OmniConnectorFactory.register_connector("YuanrongConnector", _create_yuanrong_connector)
+
+
+def _create_priskv_connector(config: dict[str, Any]) -> OmniConnectorBase:
+    try:
+        from .connectors.priskv_connector import PrisKVConnector
+    except ImportError:
+        import sys
+
+        sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+        from omni_connectors.connectors.priskv_connector import PrisKVConnector
+    return PrisKVConnector(config)
+
+
+OmniConnectorFactory.register_connector("PrisKVConnector", _create_priskv_connector)
 # Backward-compatible aliases – will be removed in the future
 OmniConnectorFactory.register_connector("MooncakeConnector", _create_mooncake_store_connector)
